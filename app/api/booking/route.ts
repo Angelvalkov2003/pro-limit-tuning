@@ -5,6 +5,7 @@ import {
   isValidTimeForDate,
 } from "@/lib/booking-hours";
 import { escapeHtml, isValidEmail } from "@/lib/email-html";
+import { RESEND_FROM } from "@/lib/resend-from";
 import {
   WORKSHOP_ADDRESS,
   WORKSHOP_ADDRESS_EN,
@@ -26,14 +27,13 @@ type Body = {
   year?: string;
   comment?: string;
   locale?: string;
+  acceptPolicies?: unknown;
 };
 
 export async function POST(request: Request) {
   const key = process.env.RESEND_API_KEY;
   const to = process.env.CONTACT_EMAIL;
-  const from =
-    process.env.RESEND_FROM_EMAIL?.trim() ||
-    "Pro Limit Tuning <onboarding@resend.dev>";
+  const from = RESEND_FROM;
 
   if (!key || !to) {
     return NextResponse.json(
@@ -69,6 +69,13 @@ export async function POST(request: Request) {
     typeof body.year === "string" ? body.year.trim().slice(0, 20) : "";
   const comment =
     typeof body.comment === "string" ? body.comment.trim().slice(0, 5000) : "";
+
+  if (body.acceptPolicies !== true) {
+    return NextResponse.json(
+      { error: "Policy acceptance is required." },
+      { status: 400 },
+    );
+  }
 
   if (categoryTitle.length < 1 || categoryTitle.length > 200) {
     return NextResponse.json({ error: "Invalid category." }, { status: 400 });
@@ -107,8 +114,14 @@ export async function POST(request: Request) {
 
   const addrLine = locale === "en" ? WORKSHOP_ADDRESS_EN : WORKSHOP_ADDRESS;
 
+  const consentNote =
+    locale === "en"
+      ? "<p><strong>Policy consent:</strong> The sender confirmed acceptance of the privacy policy and terms at submission.</p>"
+      : "<p><strong>Съгласие с политики:</strong> Подателят е потвърдил приемане на политиката за поверителност и общите условия при изпращане.</p>";
+
   const html = `
     <h2>${l("Запазване на час", "Appointment request")}</h2>
+    ${consentNote}
     <p><strong>${l("Категория", "Category")}:</strong> ${escapeHtml(categoryTitle)}</p>
     <p><strong>${l("Услуга", "Service")}:</strong> ${escapeHtml(serviceName)}</p>
     <p><strong>${l("Име", "Name")}:</strong> ${escapeHtml(name)}</p>

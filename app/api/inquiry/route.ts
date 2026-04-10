@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { Resend } from "resend";
 import { escapeHtml, isValidEmail } from "@/lib/email-html";
+import { RESEND_FROM } from "@/lib/resend-from";
 import {
   WORKSHOP_ADDRESS,
   WORKSHOP_ADDRESS_EN,
@@ -14,14 +15,13 @@ type Body = {
   email?: string;
   message?: string;
   locale?: string;
+  acceptPolicies?: unknown;
 };
 
 export async function POST(request: Request) {
   const key = process.env.RESEND_API_KEY;
   const to = process.env.CONTACT_EMAIL;
-  const from =
-    process.env.RESEND_FROM_EMAIL?.trim() ||
-    "Pro Limit Tuning <onboarding@resend.dev>";
+  const from = RESEND_FROM;
 
   if (!key || !to) {
     return NextResponse.json(
@@ -41,6 +41,13 @@ export async function POST(request: Request) {
   const phone = typeof body.phone === "string" ? body.phone.trim() : "";
   const email = typeof body.email === "string" ? body.email.trim() : "";
   const message = typeof body.message === "string" ? body.message.trim() : "";
+
+  if (body.acceptPolicies !== true) {
+    return NextResponse.json(
+      { error: "Policy acceptance is required." },
+      { status: 400 },
+    );
+  }
 
   if (name.length < 2 || name.length > 200) {
     return NextResponse.json({ error: "Invalid name." }, { status: 400 });
@@ -63,8 +70,14 @@ export async function POST(request: Request) {
 
   const addrLine = locale === "en" ? WORKSHOP_ADDRESS_EN : WORKSHOP_ADDRESS;
 
+  const consentNote =
+    locale === "en"
+      ? "<p><strong>Policy consent:</strong> The sender confirmed acceptance of the privacy policy and terms at submission.</p>"
+      : "<p><strong>Съгласие с политики:</strong> Подателят е потвърдил приемане на политиката за поверителност и общите условия при изпращане.</p>";
+
   const html = `
     <h2>${locale === "en" ? "Contact inquiry" : "Запитване"}</h2>
+    ${consentNote}
     <p><strong>${locale === "en" ? "Name" : "Име"}:</strong> ${escapeHtml(name)}</p>
     <p><strong>${locale === "en" ? "Phone" : "Телефон"}:</strong> ${escapeHtml(phone)}</p>
     <p><strong>Email:</strong> ${escapeHtml(email)}</p>

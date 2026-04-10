@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import type { Locale } from "@/lib/i18n";
 import { getMessages } from "@/lib/i18n";
 import { PhoneLink } from "@/components/PhoneLink";
+import { PolicyConsentField } from "@/components/PolicyConsentField";
 import {
   getTimeSlotsForDate,
   todayISOLocal,
@@ -42,6 +43,8 @@ export function BookingModal({
   const [brand, setBrand] = useState("");
   const [year, setYear] = useState("");
   const [comment, setComment] = useState("");
+  const [consent, setConsent] = useState(false);
+  const [consentError, setConsentError] = useState(false);
   const [status, setStatus] = useState<"idle" | "sending" | "ok" | "err">(
     "idle",
   );
@@ -61,6 +64,8 @@ export function BookingModal({
     setBrand("");
     setYear("");
     setComment("");
+    setConsent(false);
+    setConsentError(false);
     setStatus("idle");
     const today = todayISOLocal();
     setDate(today);
@@ -97,6 +102,10 @@ export function BookingModal({
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+    if (!consent) {
+      setConsentError(true);
+      return;
+    }
     if (!date || slots.length === 0 || !time) return;
     setStatus("sending");
     try {
@@ -117,6 +126,7 @@ export function BookingModal({
           year,
           comment,
           locale,
+          acceptPolicies: true,
         }),
       });
       if (!res.ok) throw new Error("fail");
@@ -344,6 +354,17 @@ export function BookingModal({
               {inquiry.phoneCta}{" "}
               <PhoneLink className="font-semibold tabular-nums text-[#dc211d] hover:underline" />
             </p>
+
+            <PolicyConsentField
+              locale={locale}
+              id="bk-consent"
+              checked={consent}
+              onChange={(v) => {
+                setConsent(v);
+                if (v) setConsentError(false);
+              }}
+              showError={consentError}
+            />
 
             {status === "err" ? (
               <p className="text-sm text-red-400">{t.error}</p>

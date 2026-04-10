@@ -49,6 +49,7 @@ export type Messages = {
     closing: string;
   };
   footer: {
+    legalPolicies: string;
     line: string;
     contactHeading: string;
     hoursTitle: string;
@@ -102,6 +103,16 @@ export type Messages = {
       success: string;
       error: string;
       phoneCta: string;
+    };
+    consent: {
+      labelBeforePrivacy: string;
+      privacyLink: string;
+      labelBetween: string;
+      termsLink: string;
+      labelAfterTerms: string;
+      note: string;
+      requiredError: string;
+      checkboxAria: string;
     };
   };
 };
@@ -197,6 +208,7 @@ const messages: Record<Locale, Messages> = {
         "Работим с грижа към детайла, защото знаем колко е важен автомобилът ти.",
     },
     footer: {
+      legalPolicies: "Политика за поверителност и общи условия",
       line: `© ${new Date().getFullYear()} Pro Limit Tuning`,
       contactHeading: "Контакт",
       hoursTitle: "Работно време",
@@ -252,6 +264,19 @@ const messages: Record<Locale, Messages> = {
         success: "Съобщението е изпратено. Благодарим!",
         error: "Неуспешно изпращане. Опитайте отново.",
         phoneCta: "Или ни се обадете:",
+      },
+      consent: {
+        labelBeforePrivacy: "Прочетох и приемам ",
+        privacyLink: "Политиката за поверителност",
+        labelBetween: " и ",
+        termsLink: "Общите условия",
+        labelAfterTerms:
+          ". Потвърждавам, че съм информиран/а как обработваме личните данни и че съм съгласен/а данните ми да бъдат използвани за обработване на това запитване или заявка за час, както е описано в политиката (вкл. правно основание по Регламент (ЕС) 2016/679).",
+        note: "Без това съгласие не можем да приемем заявката през формата.",
+        requiredError:
+          "За да изпратите формата, моля отбележете, че приемате политиката и условията.",
+        checkboxAria:
+          "Съгласие с политиката за поверителност и общите условия",
       },
     },
   },
@@ -346,6 +371,7 @@ const messages: Record<Locale, Messages> = {
         "We care about the details because we know how much your car matters to you.",
     },
     footer: {
+      legalPolicies: "Privacy policy & terms of use",
       line: `© ${new Date().getFullYear()} Pro Limit Tuning`,
       contactHeading: "Contact",
       hoursTitle: "Opening hours",
@@ -401,6 +427,18 @@ const messages: Record<Locale, Messages> = {
         success: "Message sent. Thank you!",
         error: "Could not send. Please try again.",
         phoneCta: "Or call us:",
+      },
+      consent: {
+        labelBeforePrivacy: "I have read and accept the ",
+        privacyLink: "Privacy policy",
+        labelBetween: " and ",
+        termsLink: "Terms of use",
+        labelAfterTerms:
+          ". I confirm that I understand how we process personal data and I consent to processing for the purpose of handling this inquiry or booking request as described in the privacy policy (including the legal basis under Regulation (EU) 2016/679).",
+        note: "We cannot accept a submission through the form without this consent.",
+        requiredError:
+          "Please confirm that you accept the privacy policy and terms to submit the form.",
+        checkboxAria: "Consent to the privacy policy and terms of use",
       },
     },
   },

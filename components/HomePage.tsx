@@ -176,7 +176,15 @@ export function HomePage({ locale }: Props) {
       <footer className="border-t border-white/10 bg-[#010000] py-12">
         <div className="mx-auto max-w-6xl px-4 sm:px-6">
           <ContactSocialBlock locale={locale} compact />
-          <p className="mt-10 text-center text-sm text-zinc-600">
+          <p className="mt-8 text-center">
+            <Link
+              href={locale === "en" ? "/en/politika" : "/politika"}
+              className="text-sm text-zinc-500 underline decoration-zinc-600 underline-offset-2 transition-colors hover:text-zinc-300"
+            >
+              {t.footer.legalPolicies}
+            </Link>
+          </p>
+          <p className="mt-6 text-center text-sm text-zinc-600">
             {t.footer.line}
           </p>
         </div>

@@ -4,6 +4,7 @@ import { useState } from "react";
 import type { Locale } from "@/lib/i18n";
 import { getMessages } from "@/lib/i18n";
 import { PhoneLink } from "@/components/PhoneLink";
+import { PolicyConsentField } from "@/components/PolicyConsentField";
 
 const inputClass =
   "w-full rounded-md border border-white/15 bg-black/60 px-3 py-2.5 text-sm text-white placeholder:text-zinc-600 outline-none focus:border-[#dc211d]/60";
@@ -18,18 +19,31 @@ export function InquiryForm({ locale }: Props) {
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
+  const [consent, setConsent] = useState(false);
+  const [consentError, setConsentError] = useState(false);
   const [status, setStatus] = useState<"idle" | "sending" | "ok" | "err">(
     "idle",
   );
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+    if (!consent) {
+      setConsentError(true);
+      return;
+    }
     setStatus("sending");
     try {
       const res = await fetch("/api/inquiry", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, phone, email, message, locale }),
+        body: JSON.stringify({
+          name,
+          phone,
+          email,
+          message,
+          locale,
+          acceptPolicies: true,
+        }),
       });
       if (!res.ok) throw new Error("fail");
       setStatus("ok");
@@ -37,6 +51,8 @@ export function InquiryForm({ locale }: Props) {
       setPhone("");
       setEmail("");
       setMessage("");
+      setConsent(false);
+      setConsentError(false);
     } catch {
       setStatus("err");
     }
@@ -118,6 +134,16 @@ export function InquiryForm({ locale }: Props) {
               rows={5}
             />
           </div>
+          <PolicyConsentField
+            locale={locale}
+            id="in-consent"
+            checked={consent}
+            onChange={(v) => {
+              setConsent(v);
+              if (v) setConsentError(false);
+            }}
+            showError={consentError}
+          />
           {status === "err" ? (
             <p className="text-sm text-red-400">{t.error}</p>
           ) : null}
