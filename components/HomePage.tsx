@@ -8,7 +8,11 @@ import {
   categoryTitle,
   serviceHref,
 } from "@/lib/services-catalog";
+import AnimateOnScroll from "@/components/AnimateOnScroll";
 import { ContactSocialBlock } from "@/components/ContactSocialBlock";
+import HeroTitle, {
+  type HeroTitleLine,
+} from "@/components/HeroTitle";
 import { InquiryForm } from "@/components/InquiryForm";
 import { LocationMap } from "@/components/LocationMap";
 import { PhoneLink } from "@/components/PhoneLink";
@@ -23,6 +27,24 @@ function SectionEyebrow({ children }: { children: ReactNode }) {
 }
 
 type Props = { locale: Locale };
+
+function heroTitleLines(title: string): readonly HeroTitleLine[] {
+  const parts = title.trim().split(/\s+/).filter(Boolean);
+  if (parts.length <= 1) {
+    return [
+      {
+        text: title.trim() || title,
+        className: "text-[var(--foreground)]",
+      },
+    ];
+  }
+  const last = parts[parts.length - 1]!;
+  const rest = parts.slice(0, -1).join(" ");
+  return [
+    { text: rest, className: "text-[var(--foreground)]" },
+    { text: last, className: "text-[#dc211d]" },
+  ];
+}
 
 export function HomePage({ locale }: Props) {
   const t = getMessages(locale);
@@ -41,14 +63,16 @@ export function HomePage({ locale }: Props) {
         />
         <div className="relative mx-auto grid max-w-6xl items-center gap-12 px-4 py-16 sm:gap-14 sm:px-6 sm:py-20 lg:grid-cols-2 lg:gap-16 lg:py-24">
           <div>
-            <SectionEyebrow>{t.hero.kicker}</SectionEyebrow>
-            <h1 className="mt-3 max-w-xl text-4xl font-semibold leading-[1.1] tracking-tight text-white sm:text-5xl lg:text-[3.25rem]">
-              {t.hero.title}
-            </h1>
-            <p className="mt-6 max-w-lg text-base leading-relaxed text-zinc-400 sm:text-lg">
+            <div className="hero-rest-badge">
+              <SectionEyebrow>{t.hero.kicker}</SectionEyebrow>
+            </div>
+            <div className="mt-3 max-w-xl">
+              <HeroTitle lines={heroTitleLines(t.hero.title)} />
+            </div>
+            <p className="hero-rest-paragraph mt-6 max-w-lg text-base leading-relaxed text-zinc-400 sm:text-lg">
               {t.hero.body}
             </p>
-            <div className="mt-8 flex flex-wrap gap-3">
+            <div className="hero-rest-buttons mt-8 flex flex-wrap gap-3">
               <a
                 href="#uslugi"
                 className="inline-flex items-center justify-center rounded-lg bg-[#dc211d] px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-[#dc211d]/20 transition-[filter,transform] hover:brightness-110 active:scale-[0.98]"
@@ -62,7 +86,7 @@ export function HomePage({ locale }: Props) {
                 {t.hero.ctaSecondary}
               </a>
             </div>
-            <div className="mt-8 flex flex-wrap gap-2">
+            <div className="hero-rest-up mt-8 flex flex-wrap items-center gap-3 sm:gap-4">
               {t.hero.badges.map((b) => (
                 <span
                   key={b}
@@ -71,14 +95,23 @@ export function HomePage({ locale }: Props) {
                   {b}
                 </span>
               ))}
+              <p className="flex w-full min-w-[12rem] flex-wrap items-center gap-2 text-sm text-zinc-500 sm:w-auto sm:flex-1">
+                <span>{t.footer.phoneLabel}:</span>
+                <PhoneLink className="font-semibold tabular-nums text-[#dc211d] transition-colors hover:underline" />
+              </p>
             </div>
-            <p className="mt-8 flex flex-wrap items-center gap-2 text-sm text-zinc-500">
-              <span>{t.footer.phoneLabel}:</span>
-              <PhoneLink className="font-semibold tabular-nums text-[#dc211d] transition-colors hover:underline" />
-            </p>
+            <div className="hero-rest-scroll relative mt-10 h-8 w-full shrink-0">
+              <span className="absolute left-1/2 top-0 whitespace-nowrap text-[11px] font-semibold uppercase tracking-[0.28em] text-zinc-500 animate-soft-pulse">
+                {t.hero.scrollHint}
+              </span>
+            </div>
           </div>
 
-          <div className="relative mx-auto w-full max-w-xl lg:max-w-none">
+          <AnimateOnScroll
+            className="relative mx-auto w-full max-w-xl lg:max-w-none"
+            delay="0.12s"
+            variant="strong"
+          >
             <div
               className="pointer-events-none absolute -inset-3 rounded-[1.35rem] bg-gradient-to-br from-[#dc211d]/25 via-[#dc211d]/5 to-transparent opacity-80 blur-2xl"
               aria-hidden
@@ -94,7 +127,7 @@ export function HomePage({ locale }: Props) {
                 sizes="(max-width: 1024px) 100vw, 50vw"
               />
             </figure>
-          </div>
+          </AnimateOnScroll>
         </div>
       </section>
 
@@ -109,39 +142,50 @@ export function HomePage({ locale }: Props) {
           aria-hidden
         />
         <div className="mx-auto max-w-6xl px-4 sm:px-6">
-          <SectionEyebrow>{t.services.eyebrow}</SectionEyebrow>
-          <h2 className="mt-3 text-3xl font-semibold tracking-tight text-white sm:text-4xl">
-            {t.services.title}
-          </h2>
-          <p className="mt-4 max-w-2xl text-base leading-relaxed text-zinc-400">
-            {t.services.intro}
-          </p>
+          <AnimateOnScroll>
+            <SectionEyebrow>{t.services.eyebrow}</SectionEyebrow>
+          </AnimateOnScroll>
+          <AnimateOnScroll delay="0.08s" variant="strong">
+            <h2 className="mt-3 text-3xl font-semibold tracking-tight text-white sm:text-4xl">
+              {t.services.title}
+            </h2>
+          </AnimateOnScroll>
+          <AnimateOnScroll delay="0.14s">
+            <p className="mt-4 max-w-2xl text-base leading-relaxed text-zinc-400">
+              {t.services.intro}
+            </p>
+          </AnimateOnScroll>
           <ul className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {SERVICE_CATEGORIES.map((cat) => (
+            {SERVICE_CATEGORIES.map((cat, i) => (
               <li key={cat.slug}>
-                <Link
-                  href={serviceHref(locale, cat.slug)}
-                  className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-white/[0.08] bg-gradient-to-br from-[#0a0404] via-[#050202] to-[#010000] p-6 shadow-lg shadow-black/20 transition-all duration-300 hover:-translate-y-0.5 hover:border-[#dc211d]/30 hover:shadow-xl hover:shadow-[#dc211d]/[0.07]"
+                <AnimateOnScroll
+                  delay={`${0.1 + i * 0.08}s`}
+                  variant="strong"
                 >
-                  <span
-                    className="absolute right-4 top-4 text-2xl opacity-90 transition-transform duration-300 group-hover:scale-110"
-                    aria-hidden
+                  <Link
+                    href={serviceHref(locale, cat.slug)}
+                    className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-white/[0.08] bg-gradient-to-br from-[#0a0404] via-[#050202] to-[#010000] p-6 shadow-lg shadow-black/20 transition-all duration-300 hover:-translate-y-0.5 hover:border-[#dc211d]/30 hover:shadow-xl hover:shadow-[#dc211d]/[0.07]"
                   >
-                    {cat.emoji}
-                  </span>
-                  <span className="pr-10 text-lg font-semibold text-white transition-colors group-hover:text-[#dc211d]">
-                    {categoryTitle(cat, locale)}
-                  </span>
-                  <span className="mt-3 text-sm text-zinc-500 transition-colors group-hover:text-zinc-400">
-                    {t.services.cardCta}
                     <span
-                      className="ml-1 inline-block transition-transform group-hover:translate-x-0.5"
+                      className="absolute right-4 top-4 text-2xl opacity-90 transition-transform duration-300 group-hover:scale-110"
                       aria-hidden
                     >
-                      →
+                      {cat.emoji}
                     </span>
-                  </span>
-                </Link>
+                    <span className="pr-10 text-lg font-semibold text-white transition-colors group-hover:text-[#dc211d]">
+                      {categoryTitle(cat, locale)}
+                    </span>
+                    <span className="mt-3 text-sm text-zinc-500 transition-colors group-hover:text-zinc-400">
+                      {t.services.cardCta}
+                      <span
+                        className="ml-1 inline-block transition-transform group-hover:translate-x-0.5"
+                        aria-hidden
+                      >
+                        →
+                      </span>
+                    </span>
+                  </Link>
+                </AnimateOnScroll>
               </li>
             ))}
           </ul>
@@ -153,40 +197,52 @@ export function HomePage({ locale }: Props) {
         className="relative border-t border-white/10 bg-[#060202] py-16 sm:py-20"
       >
         <div className="mx-auto max-w-6xl px-4 sm:px-6">
-          <SectionEyebrow>{t.footer.contactEyebrow}</SectionEyebrow>
+          <AnimateOnScroll>
+            <SectionEyebrow>{t.footer.contactEyebrow}</SectionEyebrow>
+          </AnimateOnScroll>
           <div className="mt-3 grid gap-12 lg:grid-cols-2 lg:items-start lg:gap-16">
-            <div className="rounded-2xl border border-white/[0.06] bg-black/20 p-6 sm:p-8">
-              <h2 className="text-xl font-semibold text-white sm:text-2xl">
-                {t.footer.contactHeading}
-              </h2>
-              <div className="mt-6">
-                <ContactSocialBlock locale={locale} />
+            <AnimateOnScroll delay="0.08s" variant="strong">
+              <div className="rounded-2xl border border-white/[0.06] bg-black/20 p-6 sm:p-8">
+                <h2 className="text-xl font-semibold text-white sm:text-2xl">
+                  {t.footer.contactHeading}
+                </h2>
+                <div className="mt-6">
+                  <ContactSocialBlock locale={locale} />
+                </div>
               </div>
-            </div>
-            <div className="rounded-2xl border border-white/[0.06] bg-black/20 p-6 sm:p-8">
-              <InquiryForm locale={locale} />
-            </div>
+            </AnimateOnScroll>
+            <AnimateOnScroll delay="0.16s" variant="strong">
+              <div className="rounded-2xl border border-white/[0.06] bg-black/20 p-6 sm:p-8">
+                <InquiryForm locale={locale} />
+              </div>
+            </AnimateOnScroll>
           </div>
-          <div className="mt-14 lg:mt-16">
+          <AnimateOnScroll
+            className="mt-14 block lg:mt-16"
+            delay="0.1s"
+            variant="strong"
+          >
             <LocationMap locale={locale} />
-          </div>
+          </AnimateOnScroll>
         </div>
       </section>
 
       <footer className="border-t border-white/10 bg-[#010000] py-12">
         <div className="mx-auto max-w-6xl px-4 sm:px-6">
-          <ContactSocialBlock locale={locale} compact />
-          <p className="mt-8 text-center">
+          <AnimateOnScroll variant="strong">
+            <ContactSocialBlock locale={locale} compact />
+          </AnimateOnScroll>
+          <AnimateOnScroll className="mt-8 block text-center" delay="0.1s">
             <Link
               href={locale === "en" ? "/en/politika" : "/politika"}
               className="text-sm text-zinc-500 underline decoration-zinc-600 underline-offset-2 transition-colors hover:text-zinc-300"
             >
               {t.footer.legalPolicies}
             </Link>
-          </p>
-          <p className="mt-6 text-center text-sm text-zinc-600">
-            {t.footer.line}
-          </p>
+          </AnimateOnScroll>
+          <AnimateOnScroll className="mt-6 block text-center" delay="0.16s">
+            <p className="text-sm text-zinc-600">{t.footer.line}</p>
+          </AnimateOnScroll>
         </div>
       </footer>
     </main>

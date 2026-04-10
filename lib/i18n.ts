@@ -29,6 +29,7 @@ export type Messages = {
     ctaSecondary: string;
     imageAlt: string;
     badges: string[];
+    scrollHint: string;
   };
   services: {
     eyebrow: string;
@@ -142,6 +143,7 @@ const messages: Record<Locale, Messages> = {
       ctaSecondary: "Свържи се с нас",
       imageAlt: "Автомобил в сервиз Pro Limit Tuning — София",
       badges: ["Чип тунинг", "Диагностика", "Детайлинг"],
+      scrollHint: "Надолу",
     },
     services: {
       eyebrow: "Пълен спектър услуги",
@@ -304,6 +306,7 @@ const messages: Record<Locale, Messages> = {
       ctaSecondary: "Get in touch",
       imageAlt: "Vehicle at Pro Limit Tuning workshop, Sofia",
       badges: ["Chip tuning", "Diagnostics", "Detailing"],
+      scrollHint: "Scroll",
     },
     services: {
       eyebrow: "Full service range",

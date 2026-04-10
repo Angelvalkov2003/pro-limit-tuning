@@ -1,3 +1,4 @@
+import AnimateOnScroll from "@/components/AnimateOnScroll";
 import type { Locale } from "@/lib/i18n";
 import { getMessages } from "@/lib/i18n";
 import { PhoneLink } from "@/components/PhoneLink";
@@ -48,23 +49,33 @@ export function WhyChooseSection({ locale }: Props) {
         aria-hidden
       />
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
-        <p className="text-center text-[11px] font-semibold uppercase tracking-[0.3em] text-[#dc211d] sm:text-xs">
-          {w.eyebrow}
-        </p>
-        <div className="mx-auto mt-4 flex flex-col items-center gap-4">
-          <div className="h-px w-12 bg-[#dc211d]/80" aria-hidden />
-          <h2 className="text-center text-xl font-bold uppercase tracking-wide text-white sm:text-2xl md:text-3xl">
-            {w.title}
-          </h2>
-        </div>
+        <AnimateOnScroll>
+          <p className="text-center text-[11px] font-semibold uppercase tracking-[0.3em] text-[#dc211d] sm:text-xs">
+            {w.eyebrow}
+          </p>
+        </AnimateOnScroll>
+        <AnimateOnScroll className="mt-4 block" delay="0.1s" variant="strong">
+          <div className="mx-auto flex flex-col items-center gap-4">
+            <div className="h-px w-12 bg-[#dc211d]/80" aria-hidden />
+            <h2 className="text-center text-xl font-bold uppercase tracking-wide text-white sm:text-2xl md:text-3xl">
+              {w.title}
+            </h2>
+          </div>
+        </AnimateOnScroll>
 
         <div className="mt-12 grid gap-12 lg:grid-cols-2 lg:gap-16">
           <div className="space-y-6 sm:space-y-7">
-            {w.pillars.map((p) => (
-              <PlusRow key={p.heading} heading={p.heading} text={p.text} />
+            {w.pillars.map((p, i) => (
+              <AnimateOnScroll
+                key={p.heading}
+                delay={`${0.05 + i * 0.06}s`}
+              >
+                <PlusRow heading={p.heading} text={p.text} />
+              </AnimateOnScroll>
             ))}
           </div>
 
+          <AnimateOnScroll delay="0.18s" variant="strong">
           <div className="rounded-xl border border-white/10 bg-[#010000]/80 p-6 sm:p-8">
             <h3 className="text-xs font-semibold uppercase tracking-[0.2em] text-[#dc211d]">
               {w.servicesHeading}
@@ -83,19 +94,24 @@ export function WhyChooseSection({ locale }: Props) {
               ))}
             </ul>
           </div>
+          </AnimateOnScroll>
         </div>
 
         <div className="mt-12 grid gap-4 sm:grid-cols-3">
-          {w.extras.map((e) => (
-            <div
+          {w.extras.map((e, i) => (
+            <AnimateOnScroll
               key={e.heading}
-              className="rounded-xl border border-white/10 bg-[#010000]/60 p-5"
+              delay={`${0.1 + i * 0.08}s`}
+              variant="strong"
             >
-              <PlusRow heading={e.heading} text={e.text} />
-            </div>
+              <div className="rounded-xl border border-white/10 bg-[#010000]/60 p-5">
+                <PlusRow heading={e.heading} text={e.text} />
+              </div>
+            </AnimateOnScroll>
           ))}
         </div>
 
+        <AnimateOnScroll delay="0.12s" variant="strong">
         <div className="mt-12 rounded-xl border border-[#dc211d]/25 bg-[#010000] p-6 sm:flex sm:items-center sm:justify-between sm:gap-8 sm:p-8">
           <div>
             <h3 className="text-xs font-semibold uppercase tracking-[0.2em] text-[#dc211d]">
@@ -118,10 +134,16 @@ export function WhyChooseSection({ locale }: Props) {
             </a>
           </div>
         </div>
+        </AnimateOnScroll>
 
-        <p className="mx-auto mt-12 max-w-2xl text-center text-base italic leading-relaxed text-zinc-400 sm:text-lg">
-          {w.closing}
-        </p>
+        <AnimateOnScroll
+          className="mx-auto mt-12 block max-w-2xl text-center"
+          delay="0.08s"
+        >
+          <p className="text-base italic leading-relaxed text-zinc-400 sm:text-lg">
+            {w.closing}
+          </p>
+        </AnimateOnScroll>
       </div>
     </section>
   );

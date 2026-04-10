@@ -140,7 +140,7 @@ export function Navbar() {
 
   return (
     <header className="sticky top-0 z-50 border-b border-white/10 bg-[#010000]">
-      <nav className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-2 px-4 sm:gap-3 sm:px-6">
+      <nav className="mx-auto flex h-16 max-w-6xl items-center gap-2 px-4 sm:gap-3 sm:px-6">
         <Link
           href={homeHref}
           className="flex min-w-0 shrink-0 items-center gap-2 py-2"
@@ -164,18 +164,7 @@ export function Navbar() {
           />
         </div>
 
-        <button
-          type="button"
-          className="flex h-11 w-11 items-center justify-center rounded-md text-zinc-200 transition-colors hover:bg-white/10 hover:text-white sm:hidden"
-          aria-expanded={mobileOpen}
-          aria-controls="mobile-drawer"
-          onClick={() => setMobileOpen(true)}
-          aria-label={t.nav.openMenu}
-        >
-          <MenuIcon />
-        </button>
-
-        <div className="hidden shrink-0 items-center gap-3 sm:flex sm:gap-4">
+        <div className="ml-auto flex shrink-0 items-center gap-2 sm:gap-3">
           <div
             className="flex rounded-md border border-white/20 p-0.5"
             role="group"
@@ -202,63 +191,77 @@ export function Navbar() {
               {t.nav.langEn}
             </Link>
           </div>
-          <PhoneLink
-            className="hidden text-sm font-semibold tabular-nums text-zinc-200 transition-colors hover:text-[#dc211d] md:inline"
-            ariaLabel={`${t.footer.phoneCallAria} ${t.footer.phoneLabel}`}
-          />
-          <a
-            href={`${homeHref}#kontakti`}
-            className="text-sm font-medium text-zinc-300 transition-colors hover:text-white"
+
+          <button
+            type="button"
+            className="flex h-11 w-11 items-center justify-center rounded-md text-zinc-200 transition-colors hover:bg-white/10 hover:text-white sm:hidden"
+            aria-expanded={mobileOpen}
+            aria-controls="mobile-drawer"
+            onClick={() => setMobileOpen(true)}
+            aria-label={t.nav.openMenu}
           >
-            {t.nav.contact}
-          </a>
-          <div className="relative" ref={servicesMenuRef}>
-            <button
-              type="button"
-              className="flex items-center gap-1 rounded-md bg-[#dc211d] px-4 py-2 text-sm font-medium text-white transition-[filter] hover:brightness-110"
-              aria-expanded={desktopServicesOpen}
-              aria-haspopup="menu"
-              aria-controls="desktop-services-menu"
-              id="desktop-services-button"
-              onClick={() => setDesktopServicesOpen((o) => !o)}
+            <MenuIcon />
+          </button>
+
+          <div className="hidden items-center gap-3 sm:flex sm:gap-4">
+            <PhoneLink
+              className="hidden text-sm font-semibold tabular-nums text-zinc-200 transition-colors hover:text-[#dc211d] md:inline"
+              ariaLabel={`${t.footer.phoneCallAria} ${t.footer.phoneLabel}`}
+            />
+            <a
+              href={`${homeHref}#kontakti`}
+              className="text-sm font-medium text-zinc-300 transition-colors hover:text-white"
             >
-              {t.nav.services}
-              <ChevronDown
-                className={`transition-transform ${desktopServicesOpen ? "rotate-180" : ""}`}
-              />
-            </button>
-            {desktopServicesOpen ? (
-              <div
-                id="desktop-services-menu"
-                role="menu"
-                aria-labelledby="desktop-services-button"
-                className="absolute right-0 top-full z-[60] mt-2 max-h-[min(70vh,28rem)] w-80 overflow-y-auto rounded-lg border border-white/10 bg-[#010000] py-2 shadow-xl"
+              {t.nav.contact}
+            </a>
+            <div className="relative" ref={servicesMenuRef}>
+              <button
+                type="button"
+                className="flex items-center gap-1 rounded-md bg-[#dc211d] px-4 py-2 text-sm font-medium text-white transition-[filter] hover:brightness-110"
+                aria-expanded={desktopServicesOpen}
+                aria-haspopup="menu"
+                aria-controls="desktop-services-menu"
+                id="desktop-services-button"
+                onClick={() => setDesktopServicesOpen((o) => !o)}
               >
-                <Link
-                  href={`${homeHref}#uslugi`}
-                  role="menuitem"
-                  className="block px-4 py-2.5 text-sm font-medium text-[#dc211d] transition-colors hover:bg-white/5"
-                  onClick={closeDesktopServices}
+                {t.nav.services}
+                <ChevronDown
+                  className={`transition-transform ${desktopServicesOpen ? "rotate-180" : ""}`}
+                />
+              </button>
+              {desktopServicesOpen ? (
+                <div
+                  id="desktop-services-menu"
+                  role="menu"
+                  aria-labelledby="desktop-services-button"
+                  className="absolute right-0 top-full z-[60] mt-2 max-h-[min(70vh,28rem)] w-80 overflow-y-auto rounded-lg border border-white/10 bg-[#010000] py-2 shadow-xl"
                 >
-                  {t.nav.allServices}
-                </Link>
-                <div className="my-1 border-t border-white/10" role="separator" />
-                {SERVICE_CATEGORIES.map((cat) => (
                   <Link
-                    key={cat.slug}
-                    href={serviceHref(locale, cat.slug)}
+                    href={`${homeHref}#uslugi`}
                     role="menuitem"
-                    className="flex items-center gap-2 px-4 py-2.5 text-sm text-zinc-200 transition-colors hover:bg-white/5 hover:text-white"
+                    className="block px-4 py-2.5 text-sm font-medium text-[#dc211d] transition-colors hover:bg-white/5"
                     onClick={closeDesktopServices}
                   >
-                    <span className="text-base" aria-hidden>
-                      {cat.emoji}
-                    </span>
-                    {categoryTitle(cat, locale)}
+                    {t.nav.allServices}
                   </Link>
-                ))}
-              </div>
-            ) : null}
+                  <div className="my-1 border-t border-white/10" role="separator" />
+                  {SERVICE_CATEGORIES.map((cat) => (
+                    <Link
+                      key={cat.slug}
+                      href={serviceHref(locale, cat.slug)}
+                      role="menuitem"
+                      className="flex items-center gap-2 px-4 py-2.5 text-sm text-zinc-200 transition-colors hover:bg-white/5 hover:text-white"
+                      onClick={closeDesktopServices}
+                    >
+                      <span className="text-base" aria-hidden>
+                        {cat.emoji}
+                      </span>
+                      {categoryTitle(cat, locale)}
+                    </Link>
+                  ))}
+                </div>
+              ) : null}
+            </div>
           </div>
         </div>
       </nav>
@@ -348,39 +351,6 @@ export function Navbar() {
               ))}
             </div>
           </nav>
-          <div className="border-t border-white/10 p-4">
-            <p className="mb-2 text-xs font-medium uppercase tracking-wider text-zinc-500">
-              {t.nav.language}
-            </p>
-            <div
-              className="flex rounded-md border border-white/20 p-0.5"
-              role="group"
-              aria-label={t.nav.language}
-            >
-              <Link
-                href="/"
-                onClick={closeMobile}
-                className={`flex-1 rounded py-2 text-center text-sm font-semibold transition-colors ${
-                  locale === "bg"
-                    ? "bg-[#dc211d] text-white"
-                    : "text-zinc-400 hover:text-white"
-                }`}
-              >
-                {t.nav.langBg}
-              </Link>
-              <Link
-                href="/en"
-                onClick={closeMobile}
-                className={`flex-1 rounded py-2 text-center text-sm font-semibold transition-colors ${
-                  locale === "en"
-                    ? "bg-[#dc211d] text-white"
-                    : "text-zinc-400 hover:text-white"
-                }`}
-              >
-                {t.nav.langEn}
-              </Link>
-            </div>
-          </div>
         </aside>
       </div>
 

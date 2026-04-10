@@ -4,6 +4,158 @@
   --background: #010000;
   --foreground: #f4f4f5;
   --accent: #dc211d;
+  --transition-duration: 0.35s;
+  --transition-ease: ease-out;
+}
+
+/* Hero заглавие – ред по ред „разкриване“ отляво надясно (clip-path) */
+@keyframes hero-reveal {
+  from {
+    clip-path: inset(0 100% 0 0);
+    opacity: 0;
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+    opacity: 1;
+  }
+}
+
+/* Бейдж над заглавието – пада отгоре */
+@keyframes hero-rest-badge {
+  from {
+    opacity: 0;
+    transform: translateY(-28px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.hero-rest-badge {
+  opacity: 0;
+  animation: hero-rest-badge 0.55s cubic-bezier(0.22, 1, 0.36, 1) 1.75s forwards;
+}
+
+/* Параграф + бутони – излизат отляво (translateX) */
+@keyframes hero-rest-left {
+  from {
+    opacity: 0;
+    transform: translateX(-24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+.hero-rest-paragraph {
+  opacity: 0;
+  animation: hero-rest-left 0.3s cubic-bezier(0.22, 1, 0.36, 1) 1.5s forwards;
+}
+.hero-rest-buttons {
+  opacity: 0;
+  animation: hero-rest-left 0.3s cubic-bezier(0.22, 1, 0.36, 1) 2s forwards;
+}
+
+/* Ред „статове“/карти под бутоните – отдолу нагоре в един flex ред (flex-wrap) */
+@keyframes hero-rest-up {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.hero-rest-up {
+  opacity: 0;
+  animation: hero-rest-up 0.55s cubic-bezier(0.22, 1, 0.36, 1) 2.25s forwards;
+}
+
+@keyframes hero-rest-fade {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.hero-rest-scroll {
+  opacity: 0;
+  animation: hero-rest-fade 0.4s cubic-bezier(0.22, 1, 0.36, 1) 2.5s forwards;
+}
+
+/* Скрол анимации */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.animate-on-scroll {
+  opacity: 0;
+  transform: translateY(14px);
+}
+.animate-on-scroll.animate-on-scroll-in-view {
+  animation: fade-in 0.55s var(--transition-ease) forwards;
+}
+
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.animate-on-scroll.animate-on-scroll-strong {
+  transform: translateY(20px);
+}
+.animate-on-scroll.animate-on-scroll-strong.animate-on-scroll-in-view {
+  animation: fade-in-up 0.6s var(--transition-ease) forwards;
+}
+
+@keyframes soft-pulse {
+  0%,
+  100% {
+    opacity: 0.6;
+    transform: translate(-50%, 0);
+  }
+  50% {
+    opacity: 1;
+    transform: translate(-50%, 4px);
+  }
+}
+.animate-soft-pulse {
+  animation: soft-pulse 2s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-title-line,
+  .hero-rest-badge,
+  .hero-rest-paragraph,
+  .hero-rest-buttons,
+  .hero-rest-up,
+  .hero-rest-scroll,
+  .animate-on-scroll,
+  .animate-soft-pulse {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+    clip-path: none !important;
+  }
+
+  .animate-on-scroll.animate-on-scroll-strong {
+    transform: none !important;
+  }
 }
 
 @theme inline {
