@@ -1,0 +1,186 @@
+import Image from "next/image";
+import Link from "next/link";
+import type { ReactNode } from "react";
+import type { Locale } from "@/lib/i18n";
+import { getMessages } from "@/lib/i18n";
+import {
+  SERVICE_CATEGORIES,
+  categoryTitle,
+  serviceHref,
+} from "@/lib/services-catalog";
+import { ContactSocialBlock } from "@/components/ContactSocialBlock";
+import { InquiryForm } from "@/components/InquiryForm";
+import { LocationMap } from "@/components/LocationMap";
+import { PhoneLink } from "@/components/PhoneLink";
+import { WhyChooseSection } from "@/components/WhyChooseSection";
+
+function SectionEyebrow({ children }: { children: ReactNode }) {
+  return (
+    <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[#dc211d] sm:text-xs">
+      {children}
+    </p>
+  );
+}
+
+type Props = { locale: Locale };
+
+export function HomePage({ locale }: Props) {
+  const t = getMessages(locale);
+
+  return (
+    <main className="flex flex-1 flex-col">
+      {/* Hero */}
+      <section className="relative overflow-hidden border-b border-white/[0.06]">
+        <div
+          className="pointer-events-none absolute -top-32 right-0 h-[min(100vw,32rem)] w-[min(100vw,32rem)] translate-x-1/4 rounded-full bg-[#dc211d]/[0.09] blur-3xl"
+          aria-hidden
+        />
+        <div
+          className="pointer-events-none absolute bottom-0 left-0 h-72 w-72 -translate-x-1/3 translate-y-1/4 rounded-full bg-[#dc211d]/[0.05] blur-3xl"
+          aria-hidden
+        />
+        <div className="relative mx-auto grid max-w-6xl items-center gap-12 px-4 py-16 sm:gap-14 sm:px-6 sm:py-20 lg:grid-cols-2 lg:gap-16 lg:py-24">
+          <div>
+            <SectionEyebrow>{t.hero.kicker}</SectionEyebrow>
+            <h1 className="mt-3 max-w-xl text-4xl font-semibold leading-[1.1] tracking-tight text-white sm:text-5xl lg:text-[3.25rem]">
+              {t.hero.title}
+            </h1>
+            <p className="mt-6 max-w-lg text-base leading-relaxed text-zinc-400 sm:text-lg">
+              {t.hero.body}
+            </p>
+            <div className="mt-8 flex flex-wrap gap-3">
+              <a
+                href="#uslugi"
+                className="inline-flex items-center justify-center rounded-lg bg-[#dc211d] px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-[#dc211d]/20 transition-[filter,transform] hover:brightness-110 active:scale-[0.98]"
+              >
+                {t.hero.ctaPrimary}
+              </a>
+              <a
+                href="#kontakti"
+                className="inline-flex items-center justify-center rounded-lg border border-white/15 bg-white/[0.03] px-6 py-3 text-sm font-semibold text-white backdrop-blur-sm transition-colors hover:border-white/25 hover:bg-white/[0.06]"
+              >
+                {t.hero.ctaSecondary}
+              </a>
+            </div>
+            <div className="mt-8 flex flex-wrap gap-2">
+              {t.hero.badges.map((b) => (
+                <span
+                  key={b}
+                  className="rounded-full border border-white/10 bg-white/[0.04] px-3.5 py-1.5 text-xs font-medium text-zinc-400"
+                >
+                  {b}
+                </span>
+              ))}
+            </div>
+            <p className="mt-8 flex flex-wrap items-center gap-2 text-sm text-zinc-500">
+              <span>{t.footer.phoneLabel}:</span>
+              <PhoneLink className="font-semibold tabular-nums text-[#dc211d] transition-colors hover:underline" />
+            </p>
+          </div>
+
+          <div className="relative mx-auto w-full max-w-xl lg:max-w-none">
+            <div
+              className="pointer-events-none absolute -inset-3 rounded-[1.35rem] bg-gradient-to-br from-[#dc211d]/25 via-[#dc211d]/5 to-transparent opacity-80 blur-2xl"
+              aria-hidden
+            />
+            <figure className="relative overflow-hidden rounded-2xl border border-white/10 bg-zinc-950/50 shadow-2xl shadow-black/40 ring-1 ring-inset ring-white/[0.04] lg:rounded-3xl">
+              <Image
+                src="/car1.png"
+                alt={t.hero.imageAlt}
+                width={1200}
+                height={800}
+                className="h-auto w-full object-cover"
+                priority
+                sizes="(max-width: 1024px) 100vw, 50vw"
+              />
+            </figure>
+          </div>
+        </div>
+      </section>
+
+      <WhyChooseSection locale={locale} />
+
+      <section
+        id="uslugi"
+        className="relative border-t border-white/10 bg-gradient-to-b from-zinc-950/80 to-black/60 py-16 sm:py-20"
+      >
+        <div
+          className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#dc211d]/40 to-transparent"
+          aria-hidden
+        />
+        <div className="mx-auto max-w-6xl px-4 sm:px-6">
+          <SectionEyebrow>{t.services.eyebrow}</SectionEyebrow>
+          <h2 className="mt-3 text-3xl font-semibold tracking-tight text-white sm:text-4xl">
+            {t.services.title}
+          </h2>
+          <p className="mt-4 max-w-2xl text-base leading-relaxed text-zinc-400">
+            {t.services.intro}
+          </p>
+          <ul className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {SERVICE_CATEGORIES.map((cat) => (
+              <li key={cat.slug}>
+                <Link
+                  href={serviceHref(locale, cat.slug)}
+                  className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-white/[0.08] bg-gradient-to-br from-[#0a0404] via-[#050202] to-[#010000] p-6 shadow-lg shadow-black/20 transition-all duration-300 hover:-translate-y-0.5 hover:border-[#dc211d]/30 hover:shadow-xl hover:shadow-[#dc211d]/[0.07]"
+                >
+                  <span
+                    className="absolute right-4 top-4 text-2xl opacity-90 transition-transform duration-300 group-hover:scale-110"
+                    aria-hidden
+                  >
+                    {cat.emoji}
+                  </span>
+                  <span className="pr-10 text-lg font-semibold text-white transition-colors group-hover:text-[#dc211d]">
+                    {categoryTitle(cat, locale)}
+                  </span>
+                  <span className="mt-3 text-sm text-zinc-500 transition-colors group-hover:text-zinc-400">
+                    {t.services.cardCta}
+                    <span
+                      className="ml-1 inline-block transition-transform group-hover:translate-x-0.5"
+                      aria-hidden
+                    >
+                      →
+                    </span>
+                  </span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      <section
+        id="kontakti"
+        className="relative border-t border-white/10 bg-[#060202] py-16 sm:py-20"
+      >
+        <div className="mx-auto max-w-6xl px-4 sm:px-6">
+          <SectionEyebrow>{t.footer.contactEyebrow}</SectionEyebrow>
+          <div className="mt-3 grid gap-12 lg:grid-cols-2 lg:items-start lg:gap-16">
+            <div className="rounded-2xl border border-white/[0.06] bg-black/20 p-6 sm:p-8">
+              <h2 className="text-xl font-semibold text-white sm:text-2xl">
+                {t.footer.contactHeading}
+              </h2>
+              <div className="mt-6">
+                <ContactSocialBlock locale={locale} />
+              </div>
+            </div>
+            <div className="rounded-2xl border border-white/[0.06] bg-black/20 p-6 sm:p-8">
+              <InquiryForm locale={locale} />
+            </div>
+          </div>
+          <div className="mt-14 lg:mt-16">
+            <LocationMap locale={locale} />
+          </div>
+        </div>
+      </section>
+
+      <footer className="border-t border-white/10 bg-[#010000] py-12">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6">
+          <ContactSocialBlock locale={locale} compact />
+          <p className="mt-10 text-center text-sm text-zinc-600">
+            {t.footer.line}
+          </p>
+        </div>
+      </footer>
+    </main>
+  );
+}

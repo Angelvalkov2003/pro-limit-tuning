@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Geist } from "next/font/google";
 import "./globals.css";
+import { LocaleHtmlLang } from "@/components/LocaleHtmlLang";
 import { Navbar } from "@/components/Navbar";
 
 const geistSans = Geist({
@@ -45,6 +46,13 @@ export const metadata: Metadata = {
     icon: "/prolimitlogo.PNG",
     apple: "/biglogo.png",
   },
+  alternates: {
+    canonical: "/",
+    languages: {
+      bg: "/",
+      en: "/en",
+    },
+  },
 };
 
 export const viewport: Viewport = {
@@ -59,6 +67,7 @@ export default function RootLayout({
   return (
     <html lang="bg" className={`${geistSans.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col font-sans">
+        <LocaleHtmlLang />
         <Navbar />
         {children}
       </body>
